@@ -6,7 +6,10 @@ import 'screens/courses_page.dart';
 import 'screens/jobs_page.dart';
 import 'screens/opportunities_page.dart';
 import 'screens/settings_page.dart';
+import 'screens/splash_page.dart';
+
 import 'theme/app_theme.dart';
+
 import 'widgets/animated_bottom_bar.dart';
 
 void main() {
@@ -22,8 +25,40 @@ class SamigTreasureApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Samig Treasure',
       theme: AppTheme.lightTheme,
-      home: const MainNavigation(),
+      home: const SplashPageWrapper(),
     );
+  }
+}
+
+class SplashPageWrapper extends StatefulWidget {
+  const SplashPageWrapper({super.key});
+
+  @override
+  State<SplashPageWrapper> createState() => _SplashPageWrapperState();
+}
+
+class _SplashPageWrapperState extends State<SplashPageWrapper> {
+  bool _showSplash = true;
+
+  void _finishSplash() {
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _showSplash = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_showSplash) {
+      return SplashPage(
+        onFinished: _finishSplash,
+      );
+    }
+
+    return const MainNavigation();
   }
 }
 
