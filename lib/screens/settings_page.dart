@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/glow_card.dart';
 import '../widgets/section_title.dart';
+import 'about_app_page.dart';
+import 'about_samgh_page.dart';
+import 'contact_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
+  void _openPage(BuildContext context, Widget page) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => page,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +63,13 @@ class SettingsPage extends StatelessWidget {
                         ),
                         SizedBox(height: 7),
                         Text(
-                          'خصّص تجربتك داخل التطبيق.',
+                          'تعرّف على التطبيق وسامغ وتواصل معنا.',
                           textDirection: TextDirection.rtl,
+                          textAlign: TextAlign.right,
                           style: TextStyle(
                             color: Colors.white70,
                             fontSize: 13,
+                            height: 1.5,
                           ),
                         ),
                       ],
@@ -74,7 +88,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 180),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _openPage(
+                      context,
+                      const AboutSamghPage(),
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.person_rounded,
                     title: 'عن سامغ',
@@ -86,7 +105,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 240),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _openPage(
+                      context,
+                      const AboutAppPage(),
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.info_outline_rounded,
                     title: 'عن كنوز سامغ',
@@ -105,7 +129,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 360),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _openPage(
+                      context,
+                      const ContactPage(),
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.chat_rounded,
                     title: 'تواصل مع سامغ',
@@ -117,7 +146,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 420),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _openPage(
+                      context,
+                      const ContactPage(),
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.facebook_rounded,
                     title: 'صفحة سامغ على Facebook',
@@ -136,7 +170,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 540),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _showComingSoon(
+                      context,
+                      'الإشعارات',
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.notifications_rounded,
                     title: 'الإشعارات',
@@ -148,7 +187,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 600),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _showComingSoon(
+                      context,
+                      'المظهر',
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.dark_mode_rounded,
                     title: 'المظهر',
@@ -160,7 +204,12 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 660),
                 child: GlowCard(
-                  onTap: () {},
+                  onTap: () {
+                    _showComingSoon(
+                      context,
+                      'اللغة',
+                    );
+                  },
                   child: const _SettingsTile(
                     icon: Icons.language_rounded,
                     title: 'اللغة',
@@ -193,6 +242,23 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  static void _showComingSoon(
+    BuildContext context,
+    String title,
+  ) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$title ستكون متاحة قريبًا',
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.right,
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
