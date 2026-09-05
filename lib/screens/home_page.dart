@@ -4,6 +4,7 @@ import '../theme/app_colors.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/fade_slide.dart';
 import '../widgets/gradient_background.dart';
+import '../widgets/page_transition.dart';
 import '../widgets/section_card.dart';
 import '../widgets/section_title.dart';
 import 'english_page.dart';
@@ -16,9 +17,7 @@ class HomePage extends StatelessWidget {
 
   void _openPage(BuildContext context, Widget page) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => page,
-      ),
+      PageTransition(page: page),
     );
   }
 
