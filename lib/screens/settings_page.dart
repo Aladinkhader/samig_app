@@ -4,6 +4,7 @@ import '../theme/app_colors.dart';
 import '../widgets/fade_slide.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/glow_card.dart';
+import '../widgets/page_transition.dart';
 import '../widgets/section_title.dart';
 import 'about_app_page.dart';
 import 'about_samgh_page.dart';
@@ -14,8 +15,23 @@ class SettingsPage extends StatelessWidget {
 
   void _openPage(BuildContext context, Widget page) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => page,
+      PageTransition(page: page),
+    );
+  }
+
+  void _showComingSoon(
+    BuildContext context,
+    String title,
+  ) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$title ستكون متاحة قريبًا',
+          textDirection: TextDirection.rtl,
+          textAlign: TextAlign.right,
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -242,23 +258,6 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  static void _showComingSoon(
-    BuildContext context,
-    String title,
-  ) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '$title ستكون متاحة قريبًا',
-          textDirection: TextDirection.rtl,
-          textAlign: TextAlign.right,
-        ),
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 2),
       ),
     );
   }
