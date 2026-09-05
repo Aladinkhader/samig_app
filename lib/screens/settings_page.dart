@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide.dart';
@@ -34,6 +35,31 @@ class SettingsPage extends StatelessWidget {
         duration: const Duration(seconds: 2),
       ),
     );
+  }
+
+  Future<void> _openUrl(
+    BuildContext context,
+    String url,
+  ) async {
+    final Uri uri = Uri.parse(url);
+
+    final bool launched = await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    );
+
+    if (!launched && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'تعذر فتح الرابط',
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.right,
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
   }
 
   @override
@@ -138,7 +164,7 @@ class SettingsPage extends StatelessWidget {
               FadeSlide(
                 delay: const Duration(milliseconds: 300),
                 child: const SectionTitle(
-                  title: 'تواصل',
+                  title: 'تواصل مع سامغ',
                 ),
               ),
               const SizedBox(height: 12),
@@ -233,28 +259,57 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 42),
               const Center(
                 child: Text(
                   'Samig Treasure',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryDark,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               const Center(
                 child: Text(
-                  'الإصدار 1.0.0',
-                  textDirection: TextDirection.rtl,
+                  'Developed by Alaeldin Khader',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppColors.textSecondary,
-                    fontSize: 11,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _DeveloperSocialButton(
+                    icon: Icons.facebook_rounded,
+                    onTap: () {
+                      _openUrl(
+                        context,
+                        'https://www.facebook.com/profile.php?id=100065331340861',
+                      );
+                    },
+                  ),
+                  const SizedBox(width: 14),
+                  _DeveloperSocialButton(
+                    icon: Icons.phone_rounded,
+                    onTap: () {
+                      _openUrl(
+                        context,
+                        'https://wa.me/249117179675',
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -285,7 +340,7 @@ class _SettingsTile extends StatelessWidget {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.10),
+              color: AppColors.primary.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -330,6 +385,47 @@ class _SettingsTile extends StatelessWidget {
             size: 17,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DeveloperSocialButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _DeveloperSocialButton({
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Ink(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            color: AppColors.primaryDark,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryDark.withValues(alpha: 0.22),
+                blurRadius: 14,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 27,
+          ),
+        ),
       ),
     );
   }
