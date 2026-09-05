@@ -10,9 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-      pdf: ^3.13.0
-  printing: ^5.15.0
 
+  pdf: ^3.13.0
+  printing: ^5.15.0
   cupertino_icons: ^1.0.8
   url_launcher: ^6.3.2
 
