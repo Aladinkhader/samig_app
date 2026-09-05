@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import '../widgets/app_logo.dart';
 import '../widgets/fade_slide.dart';
 import '../widgets/gradient_background.dart';
 import '../widgets/section_card.dart';
 import '../widgets/section_title.dart';
+import 'english_page.dart';
+import 'courses_page.dart';
+import 'jobs_page.dart';
+import 'opportunities_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  void _openPage(BuildContext context, Widget page) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => page,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +163,12 @@ class HomePage extends StatelessWidget {
                           subtitle: 'دروس ومحتوى يساعدك على تطوير لغتك',
                           icon: Icons.language_rounded,
                           color: Colors.white,
-                          onTap: () {},
+                          onTap: () {
+                            _openPage(
+                              context,
+                              const EnglishPage(),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -161,7 +179,12 @@ class HomePage extends StatelessWidget {
                           subtitle: 'اكتشف دورات تعليمية مفيدة ومتنوعة',
                           icon: Icons.school_rounded,
                           color: const Color(0xFFFFFCF2),
-                          onTap: () {},
+                          onTap: () {
+                            _openPage(
+                              context,
+                              const CoursesPage(),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -172,7 +195,12 @@ class HomePage extends StatelessWidget {
                           subtitle: 'فرص عمل مختارة ومصادر للتقديم',
                           icon: Icons.work_outline_rounded,
                           color: const Color(0xFFF8F2FF),
-                          onTap: () {},
+                          onTap: () {
+                            _openPage(
+                              context,
+                              const JobsPage(),
+                            );
+                          },
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -183,7 +211,12 @@ class HomePage extends StatelessWidget {
                           subtitle: 'منح وتدريب ومؤتمرات وفرص تعليمية',
                           icon: Icons.public_rounded,
                           color: const Color(0xFFFFF5FB),
-                          onTap: () {},
+                          onTap: () {
+                            _openPage(
+                              context,
+                              const OpportunitiesPage(),
+                            );
+                          },
                         ),
                       ),
                     ],
