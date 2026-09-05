@@ -33,6 +33,9 @@ jobs:
       - name: Check Flutter
         run: flutter --version
 
+      - name: Create Android project
+        run: flutter create --platforms=android .
+
       - name: Get dependencies
         run: flutter pub get
 
