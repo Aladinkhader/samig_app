@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../theme/app_colors.dart';
 import 'animated_press.dart';
 
@@ -23,11 +24,24 @@ class GlowCard extends StatefulWidget {
 }
 
 class _GlowCardState extends State<GlowCard> {
+  bool _isPressed = false;
   bool _isHovered = false;
+
+  void _setPressed(bool value) {
+    if (_isPressed == value) {
+      return;
+    }
+
+    setState(() {
+      _isPressed = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final cardColor = widget.color ?? AppColors.surface;
+
+    final bool lifted = _isPressed || _isHovered;
 
     return MouseRegion(
       onEnter: (_) {
@@ -40,36 +54,43 @@ class _GlowCardState extends State<GlowCard> {
           _isHovered = false;
         });
       },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
-        transform: Matrix4.translationValues(
-          0,
-          _isHovered ? -4 : 0,
-          0,
-        ),
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primaryDark.withOpacity(
-                widget.glow ? 0.14 : 0.08,
+      child: GestureDetector(
+        onTapDown: (_) => _setPressed(true),
+        onTapUp: (_) => _setPressed(false),
+        onTapCancel: () => _setPressed(false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOutCubic,
+          transform: Matrix4.translationValues(
+            0,
+            lifted ? -7 : 0,
+            0,
+          ),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryDark.withValues(
+                  alpha: lifted
+                      ? (widget.glow ? 0.20 : 0.12)
+                      : (widget.glow ? 0.13 : 0.08),
+                ),
+                blurRadius: lifted ? 25 : 14,
+                spreadRadius: lifted ? 1 : 0,
+                offset: Offset(
+                  0,
+                  lifted ? 14 : 6,
+                ),
               ),
-              blurRadius: _isHovered ? 24 : 14,
-              spreadRadius: _isHovered ? 1 : 0,
-              offset: Offset(
-                0,
-                _isHovered ? 10 : 6,
-              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            child: AnimatedPress(
+              onTap: widget.onTap,
+              child: widget.child,
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(widget.borderRadius),
-          child: AnimatedPress(
-            onTap: widget.onTap,
-            child: widget.child,
           ),
         ),
       ),
