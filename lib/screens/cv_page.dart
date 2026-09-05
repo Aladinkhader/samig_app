@@ -26,30 +26,6 @@ class _CvPageState extends State<CvPage> {
   final _languagesController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-
-    for (final controller in [
-      _nameController,
-      _jobTitleController,
-      _emailController,
-      _phoneController,
-      _locationController,
-      _summaryController,
-      _educationController,
-      _experienceController,
-      _skillsController,
-      _languagesController,
-    ]) {
-      controller.addListener(_refresh);
-    }
-  }
-
-  void _refresh() {
-    setState(() {});
-  }
-
-  @override
   void dispose() {
     _nameController.dispose();
     _jobTitleController.dispose();
@@ -238,6 +214,29 @@ class _CvPageState extends State<CvPage> {
     );
   }
 
+  void _openPreview() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => CvPreviewPage(
+          name: _nameController.text.trim(),
+          jobTitle: _jobTitleController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
+          location: _locationController.text.trim(),
+          summary: _summaryController.text.trim(),
+          education: _educationController.text.trim(),
+          experience: _experienceController.text.trim(),
+          skills: _skillsController.text.trim(),
+          languages: _languagesController.text.trim(),
+        ),
+      ),
+    );
+  }
+
   InputDecoration _decoration({
     required String label,
     required IconData icon,
@@ -323,7 +322,6 @@ class _CvPageState extends State<CvPage> {
                 if (value == null || value.trim().isEmpty) {
                   return 'هذا الحقل مطلوب';
                 }
-
                 return null;
               }
             : null,
@@ -687,15 +685,15 @@ class _CvPageState extends State<CvPage> {
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
-                      onPressed: _analyzeCv,
+                      onPressed: _openPreview,
                       icon: const Icon(
-                        Icons.analytics_rounded,
+                        Icons.visibility_rounded,
                       ),
                       label: const Text(
-                        'تحليل السيرة مع ATS',
+                        'معاينة السيرة الذاتية',
                       ),
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primaryDark,
+                        backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
                           vertical: 18,
@@ -704,8 +702,41 @@ class _CvPageState extends State<CvPage> {
                           borderRadius: BorderRadius.circular(19),
                         ),
                         elevation: 5,
-                        shadowColor: AppColors.primaryDark.withValues(
+                        shadowColor: AppColors.primary.withValues(
                           alpha: 0.25,
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FadeSlide(
+                  delay: const Duration(milliseconds: 450),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: _analyzeCv,
+                      icon: const Icon(
+                        Icons.analytics_rounded,
+                      ),
+                      label: const Text(
+                        'تحليل السيرة مع ATS',
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.primaryDark,
+                        side: const BorderSide(
+                          color: AppColors.primaryDark,
+                          width: 1.4,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 17,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(19),
                         ),
                         textStyle: const TextStyle(
                           fontSize: 15,
@@ -730,6 +761,211 @@ class _CvPageState extends State<CvPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CvPreviewPage extends StatelessWidget {
+  final String name;
+  final String jobTitle;
+  final String email;
+  final String phone;
+  final String location;
+  final String summary;
+  final String education;
+  final String experience;
+  final String skills;
+  final String languages;
+
+  const CvPreviewPage({
+    super.key,
+    required this.name,
+    required this.jobTitle,
+    required this.email,
+    required this.phone,
+    required this.location,
+    required this.summary,
+    required this.education,
+    required this.experience,
+    required this.skills,
+    required this.languages,
+  });
+
+  Widget _section({
+    required String title,
+    required String value,
+  }) {
+    if (value.trim().isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title.toUpperCase(),
+            style: const TextStyle(
+              color: AppColors.primaryDark,
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.8,
+            ),
+          ),
+          const SizedBox(height: 7),
+          Container(
+            height: 2,
+            width: 55,
+            color: AppColors.gold,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            textDirection: TextDirection.rtl,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: AppColors.text,
+              fontSize: 13,
+              height: 1.65,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final contactItems = [
+      if (email.isNotEmpty) email,
+      if (phone.isNotEmpty) phone,
+      if (location.isNotEmpty) location,
+    ];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFEDE9E2),
+      appBar: AppBar(
+        title: const Text(
+          'معاينة السيرة الذاتية',
+          textDirection: TextDirection.rtl,
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(14, 14, 14, 30),
+          children: [
+            FadeSlide(
+              child: Container(
+                constraints: const BoxConstraints(
+                  minHeight: 600,
+                ),
+                padding: const EdgeInsets.fromLTRB(27, 30, 27, 35),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.12),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name.isEmpty ? 'Your Name' : name,
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        color: AppColors.primaryDark,
+                        fontSize: 29,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      jobTitle.isEmpty
+                          ? 'Professional Title'
+                          : jobTitle,
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    if (contactItems.isNotEmpty) ...[
+                      const SizedBox(height: 13),
+                      Wrap(
+                        spacing: 14,
+                        runSpacing: 6,
+                        children: contactItems
+                            .map(
+                              (item) => Text(
+                                item,
+                                textDirection: TextDirection.rtl,
+                                style: const TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 10.5,
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 18),
+                      height: 3,
+                      width: double.infinity,
+                      color: AppColors.primaryDark,
+                    ),
+                    _section(
+                      title: 'Professional Summary',
+                      value: summary,
+                    ),
+                    _section(
+                      title: 'Experience',
+                      value: experience,
+                    ),
+                    _section(
+                      title: 'Education',
+                      value: education,
+                    ),
+                    _section(
+                      title: 'Skills',
+                      value: skills,
+                    ),
+                    _section(
+                      title: 'Languages',
+                      value: languages,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 18),
+            const Center(
+              child: Text(
+                'معاينة أولية — سيتم إضافة تصدير PDF لاحقًا',
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
