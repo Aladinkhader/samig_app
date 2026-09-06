@@ -11,6 +11,7 @@ import 'english_page.dart';
 import 'courses_page.dart';
 import 'jobs_page.dart';
 import 'opportunities_page.dart';
+import 'cv_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -72,6 +73,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+
               SliverToBoxAdapter(
                 child: FadeSlide(
                   delay: const Duration(milliseconds: 200),
@@ -87,7 +89,8 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryDark.withOpacity(0.22),
+                            color:
+                                AppColors.primaryDark.withOpacity(0.22),
                             blurRadius: 24,
                             offset: const Offset(0, 10),
                           ),
@@ -100,7 +103,8 @@ class HomePage extends StatelessWidget {
                             width: 46,
                             height: 46,
                             decoration: BoxDecoration(
-                              color: AppColors.gold.withOpacity(0.18),
+                              color:
+                                  AppColors.gold.withOpacity(0.18),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -111,7 +115,8 @@ class HomePage extends StatelessWidget {
                           const SizedBox(width: 14),
                           const Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   'كنوز سامغ',
@@ -142,6 +147,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+
               SliverToBoxAdapter(
                 child: FadeSlide(
                   delay: const Duration(milliseconds: 300),
@@ -150,70 +156,125 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
+
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 30),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      FadeSlide(
-                        delay: const Duration(milliseconds: 350),
-                        child: SectionCard(
-                          title: 'تعلم الإنجليزية',
-                          subtitle: 'دروس ومحتوى يساعدك على تطوير لغتك',
-                          icon: Icons.language_rounded,
-                          color: Colors.white,
-                          onTap: () {
-                            _openPage(
-                              context,
-                              const EnglishPage(),
-                            );
-                          },
-                        ),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    children: [
+                      // الصف الأول
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FadeSlide(
+                              delay:
+                                  const Duration(milliseconds: 350),
+                              child: SectionCard(
+                                title: 'تعلم الإنجليزية',
+                                subtitle:
+                                    'دروس ومحتوى يساعدك على تطوير لغتك',
+                                icon: Icons.language_rounded,
+                                color: Colors.white,
+                                onTap: () {
+                                  _openPage(
+                                    context,
+                                    const EnglishPage(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: FadeSlide(
+                              delay:
+                                  const Duration(milliseconds: 400),
+                              child: SectionCard(
+                                title: 'الكورسات',
+                                subtitle:
+                                    'اكتشف دورات تعليمية مفيدة ومتنوعة',
+                                icon: Icons.school_rounded,
+                                color:
+                                    const Color(0xFFFFFCF2),
+                                onTap: () {
+                                  _openPage(
+                                    context,
+                                    const CoursesPage(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+
                       const SizedBox(height: 14),
-                      FadeSlide(
-                        delay: const Duration(milliseconds: 400),
-                        child: SectionCard(
-                          title: 'الكورسات',
-                          subtitle: 'اكتشف دورات تعليمية مفيدة ومتنوعة',
-                          icon: Icons.school_rounded,
-                          color: const Color(0xFFFFFCF2),
-                          onTap: () {
-                            _openPage(
-                              context,
-                              const CoursesPage(),
-                            );
-                          },
-                        ),
+
+                      // الصف الثاني
+                      Row(
+                        children: [
+                          Expanded(
+                            child: FadeSlide(
+                              delay:
+                                  const Duration(milliseconds: 450),
+                              child: SectionCard(
+                                title: 'الوظائف',
+                                subtitle:
+                                    'فرص عمل مختارة ومصادر للتقديم',
+                                icon:
+                                    Icons.work_outline_rounded,
+                                color:
+                                    const Color(0xFFF8F2FF),
+                                onTap: () {
+                                  _openPage(
+                                    context,
+                                    const JobsPage(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: FadeSlide(
+                              delay:
+                                  const Duration(milliseconds: 500),
+                              child: SectionCard(
+                                title: 'الفرص',
+                                subtitle:
+                                    'منح وتدريب ومؤتمرات وفرص تعليمية',
+                                icon: Icons.public_rounded,
+                                color:
+                                    const Color(0xFFFFF5FB),
+                                onTap: () {
+                                  _openPage(
+                                    context,
+                                    const OpportunitiesPage(),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+
                       const SizedBox(height: 14),
+
+                      // السيرة الذاتية - بعرض كامل
                       FadeSlide(
-                        delay: const Duration(milliseconds: 450),
+                        delay:
+                            const Duration(milliseconds: 550),
                         child: SectionCard(
-                          title: 'الوظائف',
-                          subtitle: 'فرص عمل مختارة ومصادر للتقديم',
-                          icon: Icons.work_outline_rounded,
-                          color: const Color(0xFFF8F2FF),
+                          title: 'منشئ السيرة الذاتية',
+                          subtitle:
+                              'أنشئ CV احترافيًا ومنظمًا ومتوافقًا مع ATS',
+                          icon: Icons.description_rounded,
+                          color:
+                              const Color(0xFFF3F8FF),
                           onTap: () {
                             _openPage(
                               context,
-                              const JobsPage(),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 14),
-                      FadeSlide(
-                        delay: const Duration(milliseconds: 500),
-                        child: SectionCard(
-                          title: 'الفرص',
-                          subtitle: 'منح وتدريب ومؤتمرات وفرص تعليمية',
-                          icon: Icons.public_rounded,
-                          color: const Color(0xFFFFF5FB),
-                          onTap: () {
-                            _openPage(
-                              context,
-                              const OpportunitiesPage(),
+                              const CvPage(),
                             );
                           },
                         ),
