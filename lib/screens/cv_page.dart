@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide.dart';
@@ -749,7 +752,7 @@ class _CvPageState extends State<CvPage> {
                 const SizedBox(height: 12),
                 const Center(
                   child: Text(
-                    'النسخة الأولية — سيتم تطوير التحليل والتصدير لاحقًا',
+                    'أنشئ سيرتك الذاتية وصدّرها بصيغة PDF',
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -834,6 +837,179 @@ class CvPreviewPage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _downloadPdf() async {
+    final fontData = await rootBundle.load(
+      'assets/fonts/NotoSansArabic-Regular.ttf',
+    );
+
+    final arabicFont = pw.Font.ttf(fontData);
+
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(35),
+        textDirection: pw.TextDirection.rtl,
+        theme: pw.ThemeData.withFont(
+          base: arabicFont,
+        ),
+        build: (context) {
+          return [
+            pw.Text(
+              name.isEmpty ? 'Your Name' : name,
+              style: pw.TextStyle(
+                font: arabicFont,
+                fontSize: 25,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 6),
+            pw.Text(
+              jobTitle.isEmpty ? 'Professional Title' : jobTitle,
+              style: pw.TextStyle(
+                font: arabicFont,
+                fontSize: 15,
+              ),
+            ),
+            pw.SizedBox(height: 12),
+            if (email.isNotEmpty)
+              pw.Text(
+                email,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 10,
+                ),
+              ),
+            if (phone.isNotEmpty)
+              pw.Text(
+                phone,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 10,
+                ),
+              ),
+            if (location.isNotEmpty)
+              pw.Text(
+                location,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 10,
+                ),
+              ),
+            pw.SizedBox(height: 10),
+            pw.Divider(),
+            if (summary.isNotEmpty) ...[
+              pw.SizedBox(height: 10),
+              pw.Text(
+                'Professional Summary',
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                summary,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 11,
+                  lineSpacing: 3,
+                ),
+              ),
+            ],
+            if (experience.isNotEmpty) ...[
+              pw.SizedBox(height: 18),
+              pw.Text(
+                'Experience',
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                experience,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 11,
+                  lineSpacing: 3,
+                ),
+              ),
+            ],
+            if (education.isNotEmpty) ...[
+              pw.SizedBox(height: 18),
+              pw.Text(
+                'Education',
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                education,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 11,
+                  lineSpacing: 3,
+                ),
+              ),
+            ],
+            if (skills.isNotEmpty) ...[
+              pw.SizedBox(height: 18),
+              pw.Text(
+                'Skills',
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                skills,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 11,
+                  lineSpacing: 3,
+                ),
+              ),
+            ],
+            if (languages.isNotEmpty) ...[
+              pw.SizedBox(height: 18),
+              pw.Text(
+                'Languages',
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 15,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              ),
+              pw.SizedBox(height: 6),
+              pw.Text(
+                languages,
+                style: pw.TextStyle(
+                  font: arabicFont,
+                  fontSize: 11,
+                  lineSpacing: 3,
+                ),
+              ),
+            ],
+          ];
+        },
+      ),
+    );
+
+    await Printing.sharePdf(
+      bytes: await pdf.save(),
+      filename: 'Samig_CV.pdf',
     );
   }
 
@@ -954,9 +1130,36 @@ class CvPreviewPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: _downloadPdf,
+                icon: const Icon(
+                  Icons.picture_as_pdf_rounded,
+                ),
+                label: const Text(
+                  'تحميل السيرة الذاتية PDF',
+                ),
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primaryDark,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 17,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(19),
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             const Center(
               child: Text(
-                'معاينة أولية — سيتم إضافة تصدير PDF لاحقًا',
+                'PDF جاهز للطباعة والمشاركة',
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.center,
                 style: TextStyle(
