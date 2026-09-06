@@ -851,7 +851,7 @@ class CvPreviewPage extends StatelessWidget {
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: pw.PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(35),
         textDirection: pw.TextDirection.rtl,
         theme: pw.ThemeData.withFont(
