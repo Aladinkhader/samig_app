@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -851,7 +852,7 @@ class CvPreviewPage extends StatelessWidget {
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: pw.PdfPageFormat.a4,
+        pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(35),
         textDirection: pw.TextDirection.rtl,
         theme: pw.ThemeData.withFont(
